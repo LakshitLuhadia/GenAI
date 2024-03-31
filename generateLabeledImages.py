@@ -11,6 +11,7 @@ API_KEY = "AIzaSyCf6fSrmV5D0tlC6g5aemWiK8qpw-lKDps"
 # Directory to store generated images
 OUTPUT_DIRECTORY = "test3"
 
+START_ROW = 7584
 
 def generate_static_map(location_name):
     params = {
@@ -38,14 +39,13 @@ def main():
     # Read CSV file
     with open('us_hospital_locations.csv', newline='') as csvfile:
         reader = csv.reader(csvfile)
-        count = 0
+        for _ in range(START_ROW):
+            next(reader)  # Skip rows until START_ROW is reached
         for row in reader:
-            if len(row) >= 5 and count < 20:
-                count += 1
+            if len(row) >= 5:
                 hospital_name = row[4]
                 filename = f"{hospital_name}_map.png"
                 filepath = os.path.join(OUTPUT_DIRECTORY, filename)
-                print(f"Generating image for: {hospital_name}")
                 # Generate static map
                 image_data = generate_static_map(hospital_name)
 
